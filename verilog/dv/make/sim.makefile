@@ -58,28 +58,28 @@ hex:  ${BLOCKS:=.hex}
 ##############################################################################
 # Runing the simulations
 ##############################################################################
+.PHONY: RTL
+RTL: $(wildcard *_tb.v) $(wildcard *.hex)
+	# this is RTL
+	# iverilog -Ttyp -DFUNCTIONAL -DSIM -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
+        -f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $@ $<
 
-%.vvp: %_tb.v %.hex
+.PHONY: GL
+GL: $(wildcard *_tb.v) $(wildcard *.hex)
+	# this is GL
+	# iverilog -Ttyp -DFUNCTIONAL -DGL -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
+        -f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@ $<
 
-## RTL
-ifeq ($(SIM),RTL)
-	iverilog -Ttyp -DFUNCTIONAL -DSIM -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-	-f$(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $@ $<
-endif 
-
-## GL
-ifeq ($(SIM),GL)
-	iverilog -Ttyp -DFUNCTIONAL -DGL -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-        -f$(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@ $<
-endif 
-
-## GL+SDF
-ifeq ($(SIM),GL_SDF)
-	cvc64  +interp \
+.PHONY: GL_SDF
+GL_SDF: $(wildcard *_tb.v) $(wildcard *.hex)
+	# this is GL_SDF
+	#cvc64  +interp \
 	+define+SIM +define+FUNCTIONAL +define+GL +define+USE_POWER_PINS +define+UNIT_DELAY +define+ENABLE_SDF \
 	+change_port_type +dump2fst +fst+parallel2=on   +nointeractive +notimingchecks +mipdopt \
 	 -f $(VERILOG_PATH)/includes/includes.gl+sdf.$(CONFIG) $<
-endif
+
+%.vvp: %_tb.v %.hex $(SIM)
+	# simulating
 
 %.vcd: %.vvp
 
