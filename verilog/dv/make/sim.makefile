@@ -19,15 +19,13 @@ export IVERILOG_DUMPER = fst
 
 # RTL/GL/GL_SDF
 SIM?=RTL
+SIMS = RTL GL GL_SDF
 
-.SUFFIXES:
 
+VCDS = $(foreach i,$(SIMS),$(BLOCKS)-$(i))
+VPPS = $(foreach i,$(SIMS),$(i).vpp)
+all: $(VCDS)
 
-all:  ${BLOCKS:=.vcd} ${BLOCKS:=.lst}
-
-hex:  ${BLOCKS:=.hex}
-
-#.SUFFIXES:
 
 ##############################################################################
 # Comiple firmeware
@@ -59,19 +57,19 @@ hex:  ${BLOCKS:=.hex}
 # Runing the simulations
 ##############################################################################
 .PHONY: RTL
-RTL: $(wildcard *_tb.v) $(wildcard *.hex)
+RTL: $(BLOCKS)_tb.v $(BLOCKS).hex
 	# this is RTL
 	iverilog -Ttyp -DFUNCTIONAL -DSIM -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-		-f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $@.vvp $<
+		-f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $(BLOCKS).vvp $<
 
 .PHONY: GL
-GL: $(wildcard *_tb.v) $(wildcard *.hex)
+GL: $(BLOCKS)_tb.v $(BLOCKS).hex
 	# this is GL
 	iverilog -Ttyp -DFUNCTIONAL -DGL -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-		-f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@.vvp $<
+		-f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $(BLOCKS).vvp $<
 
 .PHONY: GL_SDF
-GL_SDF: $(wildcard *_tb.v) $(wildcard *.hex)
+GL_SDF: $(BLOCKS)_tb.v $(BLOCKS).hex
 	# this is GL_SDF
 	cvc64  +interp \
 		+define+SIM +define+FUNCTIONAL +define+GL +define+USE_POWER_PINS +define+UNIT_DELAY +define+ENABLE_SDF \
@@ -79,24 +77,11 @@ GL_SDF: $(wildcard *_tb.v) $(wildcard *.hex)
 		-f $(VERILOG_PATH)/includes/includes.gl+sdf.$(CONFIG) $<
 
 %.vvp: %_tb.v %.hex $(SIM)
-	# simulating
+	# simulating $(BLOCKS)
+	
 
-%.vcd: %.vvp
-
-ifeq ($(SIM),RTL)
-	vvp  $<
-	mv $@ RTL-$@
-endif
-ifeq ($(SIM),GL)
-	vvp  $<
-	mv $@ GL-$@
-endif
-ifeq ($(SIM),GL_SDF)
-	mv $@ GL_SDF-$@
-endif
-
-# twinwave: RTL-%.vcd GL-%.vcd
-#     twinwave RTL-$@ * + GL-$@ *
+$(VCDS): $(BLOCKS)-% : %.vvp
+	vvp $@
 
 check-env:
 ifndef PDK_ROOT
