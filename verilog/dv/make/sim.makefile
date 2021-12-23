@@ -99,7 +99,7 @@ endif
 #     twinwave RTL-$@ * + GL-$@ *
 
 check-env:
-	ifndef PDK_ROOT
+ifndef PDK_ROOT
 	$(error PDK_ROOT is undefined, please export it before running make)
 endif
 ifeq (,$(wildcard $(PDK_ROOT)/sky130A))
