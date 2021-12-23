@@ -61,22 +61,22 @@ hex:  ${BLOCKS:=.hex}
 .PHONY: RTL
 RTL: $(wildcard *_tb.v) $(wildcard *.hex)
 	# this is RTL
-	# iverilog -Ttyp -DFUNCTIONAL -DSIM -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-        -f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $@ $<
+	iverilog -Ttyp -DFUNCTIONAL -DSIM -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
+		-f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $@.vvp $<
 
 .PHONY: GL
 GL: $(wildcard *_tb.v) $(wildcard *.hex)
 	# this is GL
-	# iverilog -Ttyp -DFUNCTIONAL -DGL -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-        -f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@ $<
+	iverilog -Ttyp -DFUNCTIONAL -DGL -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
+		-f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@.vvp $<
 
 .PHONY: GL_SDF
 GL_SDF: $(wildcard *_tb.v) $(wildcard *.hex)
 	# this is GL_SDF
-	#cvc64  +interp \
-	+define+SIM +define+FUNCTIONAL +define+GL +define+USE_POWER_PINS +define+UNIT_DELAY +define+ENABLE_SDF \
-	+change_port_type +dump2fst +fst+parallel2=on   +nointeractive +notimingchecks +mipdopt \
-	 -f $(VERILOG_PATH)/includes/includes.gl+sdf.$(CONFIG) $<
+	cvc64  +interp \
+		+define+SIM +define+FUNCTIONAL +define+GL +define+USE_POWER_PINS +define+UNIT_DELAY +define+ENABLE_SDF \
+		+change_port_type +dump2fst +fst+parallel2=on   +nointeractive +notimingchecks +mipdopt \
+		-f $(VERILOG_PATH)/includes/includes.gl+sdf.$(CONFIG) $<
 
 %.vvp: %_tb.v %.hex $(SIM)
 	# simulating
@@ -85,21 +85,21 @@ GL_SDF: $(wildcard *_tb.v) $(wildcard *.hex)
 
 ifeq ($(SIM),RTL)
 	vvp  $<
-	 mv $@ RTL-$@
+	mv $@ RTL-$@
 endif
 ifeq ($(SIM),GL)
 	vvp  $<
-	 mv $@ GL-$@
+	mv $@ GL-$@
 endif
 ifeq ($(SIM),GL_SDF)
-	 mv $@ GL_SDF-$@
+	mv $@ GL_SDF-$@
 endif
 
 # twinwave: RTL-%.vcd GL-%.vcd
 #     twinwave RTL-$@ * + GL-$@ *
 
 check-env:
-ifndef PDK_ROOT
+	ifndef PDK_ROOT
 	$(error PDK_ROOT is undefined, please export it before running make)
 endif
 ifeq (,$(wildcard $(PDK_ROOT)/sky130A))
@@ -110,7 +110,7 @@ ifeq (,$(wildcard $(GCC_PATH)/$(GCC_PREFIX)-gcc ))
 endif
 # check for efabless style installation
 ifeq (,$(wildcard $(PDK_ROOT)/sky130A/libs.ref/*/verilog))
-SIM_DEFINES := ${SIM_DEFINES} -DEF_STYLE
+	SIM_DEFINES := ${SIM_DEFINES} -DEF_STYLE
 endif
 
 
