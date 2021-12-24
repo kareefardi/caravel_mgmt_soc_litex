@@ -1,0 +1,55 @@
+Reading irq.hex
+irq.hex loaded into memory
+Memory 5 bytes = 0x6f 0x00 0x00 0x0b 0x13
+FST info: dumpfile irq.vcd opened for output.
+GPIO state = 0000 (0000)
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
+Monitor: Test IRQ (GL) Started
+GPIO state = 0000 (0101)
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
+GPIO state = 0000 (1010)
+GPIO state = 0010 (1010)
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
+GPIO state = 0100 (1010)
+Monitor: Test IRQ (GL) Passed
+irq_tb.v:97: $finish called at 1083613500 (1ps)

@@ -1,0 +1,51 @@
+Reading gpio_mgmt.hex
+gpio_mgmt.hex loaded into memory
+Memory 5 bytes = 0x6f 0x00 0x00 0x0b 0x13
+FST info: dumpfile gpio_mgmt.vcd opened for output.
+Mgmt GPIO state = zzzzzzzzxxxxxxxx (  z -   x)
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
+Blink.
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
++1000 cycles
+Blink.
++1000 cycles
++1000 cycles
++1000 cycles
+Blink.
++1000 cycles
++1000 cycles
+Blink.
++1000 cycles
++1000 cycles
++1000 cycles
+Blink.
++1000 cycles
++1000 cycles
+Blink.
++1000 cycles
++1000 cycles
++1000 cycles
+Blink.
++1000 cycles
++1000 cycles
+Blink.
++1000 cycles
++1000 cycles
++1000 cycles
+Blink.
++1000 cycles
++1000 cycles
+Monitor: Test Mgmt GPIO (GL) Passed
+gpio_mgmt_tb.v:204: $finish called at 888788500 (1ps)

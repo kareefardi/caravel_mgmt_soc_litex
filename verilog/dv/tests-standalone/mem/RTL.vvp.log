@@ -1,0 +1,53 @@
+Reading mem.hex
+mem.hex loaded into memory
+Memory 5 bytes = 0x6f 0x00 0x00 0x0b 0x13
+FST info: dumpfile mem.vcd opened for output.
++5000 cycles
++5000 cycles
+Mem Test (word rw) started
+GPIO state = a040
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
+Monitor: Test MEM (RTL) [word rw]  passed
+GPIO state = ab41
+Mem Test (short rw) started
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
+Monitor: Test MEM (RTL) [short rw]  passed
+Mem Test (byte rw) started
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
++5000 cycles
+Monitor: Test MEM (RTL) [byte rw] passed
+mem_tb.v:169: $finish called at 5124012500 (1ps)
