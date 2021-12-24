@@ -1,8 +1,0 @@
-Reading uart.hex
-uart.hex loaded into memory
-Memory 5 bytes = 0x6f 0x00 0x00 0x0b 0x13
-FST info: dumpfile uart.vcd opened for output.
-Wait for UART o/p
-UART Test started
-UART Test (RTL) passed
-uart_tb.v:109: $finish called at 6609012500 (1ps)
