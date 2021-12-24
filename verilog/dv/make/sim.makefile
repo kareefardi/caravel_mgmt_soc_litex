@@ -28,6 +28,45 @@ VVPS = $(foreach i,$(SIMS),$(i).vvp)
 ALL: $(VCDS) GL_SDF.vcd
 
 
+	
+##############################################################################
+# Runing the simulations
+##############################################################################
+.PHONY: RTL
+.PHONY: RTL.vcd 
+RTL.vcd : $(BLOCKS)_tb.v $(BLOCKS).hex
+	# this is RTL
+	iverilog -Ttyp -DFUNCTIONAL -DSIM -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
+		-f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $@ $< 
+
+.PHONY: GL
+.PHONY: GL.vcd 
+GL.vcd : $(BLOCKS)_tb.v $(BLOCKS).hex
+	# this is GL
+	iverilog -Ttyp -DFUNCTIONAL -DGL -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
+		-f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@ $<
+
+.PHONY: GL_SDF
+.PHONY: GL_SDF.vpp
+GL_SDF.vvp : $(BLOCKS)_tb.v $(BLOCKS).hex
+	# this is GL_SDF
+	cvc  +interp \
+		+define+SIM +define+FUNCTIONAL +define+GL +define+USE_POWER_PINS +define+UNIT_DELAY +define+ENABLE_SDF \
+		+change_port_type +dump2fst +fst+parallel2=on   +nointeractive +notimingchecks +mipdopt \
+		-f $(VERILOG_PATH)/includes/includes.gl+sdf.$(CONFIG) $< | tee $@.log
+
+GL_SDF : % : %.vpp
+	# done simulation $(BLOCKS)
+	
+
+RTL GL : % : %.vcd
+	# done simulating $(BLOCKS)
+
+
+RTL.vcd GL.vcd : %.vcd : %.vvp
+	vvp $< | tee $<.log
+
+
 ##############################################################################
 # Comiple firmeware
 ##############################################################################
@@ -53,61 +92,12 @@ ALL: $(VCDS) GL_SDF.vcd
 %.bin: %.elf
 	${GCC_PATH}/${GCC_PREFIX}-objcopy -O binary $< /dev/stdout | tail -c +1048577 > $@
 	
-	
-##############################################################################
-# Runing the simulations
-##############################################################################
-.PHONY: RTL
-.PHONY: RTL.vvp
-RTL.vvp: $(BLOCKS)_tb.v $(BLOCKS).hex
-	# this is RTL
-	iverilog -Ttyp -DFUNCTIONAL -DSIM -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-		-f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $@ $< 
-
-.PHONY: GL
-.PHONY: GL.vvp
-GL.vvp: $(BLOCKS)_tb.v $(BLOCKS).hex
-	# this is GL
-	iverilog -Ttyp -DFUNCTIONAL -DGL -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-		-f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@ $<
-
-.PHONY: GL_SDF
-.PHONY: GL_SDF.vvp
-.PHONY: GL_SDF.vcd
-GL_SDF.vcd GL_SDF.vvp : $(BLOCKS)_tb.v $(BLOCKS).hex
-	# this is GL_SDF
-	cvc  +interp \
-		+define+SIM +define+FUNCTIONAL +define+GL +define+USE_POWER_PINS +define+UNIT_DELAY +define+ENABLE_SDF \
-		+change_port_type +dump2fst +fst+parallel2=on   +nointeractive +notimingchecks +mipdopt \
-		-f $(VERILOG_PATH)/includes/includes.gl+sdf.$(CONFIG) $< | tee $@.log
-
-$(SIMS): % : %.vcd
-	# done simulating $(BLOCKS)
-
-
-$(VCDS): %.vcd : %.vvp
-	vvp $< | tee $<.log
-
-check-env:
-ifndef PDK_ROOT
-	$(error PDK_ROOT is undefined, please export it before running make)
-endif
-ifeq (,$(wildcard $(PDK_ROOT)/sky130A))
-	$(error $(PDK_ROOT)/sky130A not found, please install pdk before running make)
-endif
-ifeq (,$(wildcard $(GCC_PATH)/$(GCC_PREFIX)-gcc ))
-	$(error $(GCC_PATH)/$(GCC_PREFIX)-gcc is not found, please export GCC_PATH and GCC_PREFIX before running make)
-endif
-# check for efabless style installation
-ifeq (,$(wildcard $(PDK_ROOT)/sky130A/libs.ref/*/verilog))
-	SIM_DEFINES := ${SIM_DEFINES} -DEF_STYLE
-endif
 
 
 # ---- Clean ----
 
 clean:
-	\rm  -f *.elf *.hex *.bin *.vvp *.log *.vcd *.lst *.hexe
+	rm  -f *.elf *.hex *.bin *.vvp *.log *.vcd *.lst *.hexe
 
 .PHONY: clean hex all
 
