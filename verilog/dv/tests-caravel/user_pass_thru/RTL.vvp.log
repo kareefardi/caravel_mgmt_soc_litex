@@ -1,0 +1,24 @@
+Reading user_pass_thru.hex
+user_pass_thru.hex loaded into memory
+Memory 5 bytes = 0x6f 0x00 0x00 0x0b 0x13
+Reading test_data
+test_data loaded into memory
+Memory 5 bytes = 0x6f 0x00 0x00 0x0b 0x93
+FST info: dumpfile user_pass_thru.vcd opened for output.
+>> Waiting for program start...
+Read data = 0x11 (should be 0x11)
+Read flash data = 0x6f (should be 0x6f)
+Read flash data = 0x00 (should be 0x00)
+Read flash data = 0x00 (should be 0x00)
+Read flash data = 0x0b (should be 0x0b)
+Read flash data = 0x93 (should be 0x93)
+Read flash data = 0x01 (should be 0x01)
+Read flash data = 0x00 (should be 0x00)
+Read flash data = 0x00 (should be 0x00)
+>> Initiating reset thru housekeeping...
+>> Waiting for processor to restart...
+Read data = 0x11 (should be 0x11)
+>> Waiting for program end...
+output:                                             ðABC
+Monitor: Test HK SPI Pass-thru (RTL) Passed
+user_pass_thru_tb.v:319: $finish called at 2987812500 (1ps)

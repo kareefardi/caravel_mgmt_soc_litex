@@ -1,0 +1,12 @@
+Reading debug.hex
+debug.hex loaded into memory
+Memory 5 bytes = 0x6f 0x00 0x00 0x0b 0x13
+FST info: dumpfile debug.vcd opened for output.
+Wait for Debug o/p
+Executing SRAM write
+Debug Test started
+Executing SRAM read
+output: 775555ab
+SRAM write succeeded
+Monitor: Test Debug (RTL) passed
+debug_tb.v:125: $finish called at 704212500 (1ps)
