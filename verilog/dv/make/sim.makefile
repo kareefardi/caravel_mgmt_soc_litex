@@ -21,10 +21,11 @@ export IVERILOG_DUMPER = fst
 SIM?=RTL
 SIMS = RTL GL GL_SDF
 
-
-VCDS = $(foreach i,$(SIMS),$(BLOCKS)-$(i))
-VPPS = $(foreach i,$(SIMS),$(i).vpp)
-all: $(VCDS)
+VCDS = RTL.vcd GL.vcd
+VVPS = $(foreach i,$(SIMS),$(i).vvp)
+#all: GL.vcd
+#ALL: $(VCDS) GL_SDF.vcd
+ALL: $(VCDS) 
 
 
 ##############################################################################
@@ -57,31 +58,34 @@ all: $(VCDS)
 # Runing the simulations
 ##############################################################################
 .PHONY: RTL
-RTL: $(BLOCKS)_tb.v $(BLOCKS).hex
+.PHONY: RTL.vvp
+RTL.vvp: $(BLOCKS)_tb.v $(BLOCKS).hex
 	# this is RTL
 	iverilog -Ttyp -DFUNCTIONAL -DSIM -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-		-f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $(BLOCKS).vvp $<
+		-f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $@.vvp $< 
 
 .PHONY: GL
-GL: $(BLOCKS)_tb.v $(BLOCKS).hex
+.PHONY: GL.vcd
+GL.vvp: $(BLOCKS)_tb.v $(BLOCKS).hex
 	# this is GL
 	iverilog -Ttyp -DFUNCTIONAL -DGL -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-		-f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $(BLOCKS).vvp $<
+		-f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@.vvp $<
 
 .PHONY: GL_SDF
-GL_SDF: $(BLOCKS)_tb.v $(BLOCKS).hex
+.PHONY: GL_SDF.vcd
+GL_SDF.vvp : $(BLOCKS)_tb.v $(BLOCKS).hex
 	# this is GL_SDF
-	cvc64  +interp \
+	cvc  +interp \
 		+define+SIM +define+FUNCTIONAL +define+GL +define+USE_POWER_PINS +define+UNIT_DELAY +define+ENABLE_SDF \
 		+change_port_type +dump2fst +fst+parallel2=on   +nointeractive +notimingchecks +mipdopt \
-		-f $(VERILOG_PATH)/includes/includes.gl+sdf.$(CONFIG) $<
+		-f $(VERILOG_PATH)/includes/includes.gl+sdf.$(CONFIG) $< | tee $@.log
 
-%.vvp: %_tb.v %.hex $(SIM)
-	# simulating $(BLOCKS)
-	
+$(SIMS): % : %.vcd
+	# done simulating $(BLOCKS)
 
-$(VCDS): $(BLOCKS)-% : %.vvp
-	vvp $@
+
+$(VCDS): %.vcd : %.vvp
+	vvp $< | tee $<.log
 
 check-env:
 ifndef PDK_ROOT
