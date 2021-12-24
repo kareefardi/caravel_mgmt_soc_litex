@@ -25,7 +25,7 @@ VCDS = RTL.vcd GL.vcd
 VVPS = $(foreach i,$(SIMS),$(i).vvp)
 #all: GL.vcd
 #ALL: $(VCDS) GL_SDF.vcd
-ALL: $(VCDS) GL_SDF.vcd
+ALL: GL_SDF RTL GL
 
 
 	
