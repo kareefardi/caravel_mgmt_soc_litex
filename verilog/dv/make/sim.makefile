@@ -62,18 +62,19 @@ ALL: $(VCDS) GL_SDF.vcd
 RTL.vvp: $(BLOCKS)_tb.v $(BLOCKS).hex
 	# this is RTL
 	iverilog -Ttyp -DFUNCTIONAL -DSIM -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-		-f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $@.vvp $< 
+		-f $(VERILOG_PATH)/includes/includes.rtl.$(CONFIG) -o $@ $< 
 
 .PHONY: GL
-.PHONY: GL.vcd
+.PHONY: GL.vvp
 GL.vvp: $(BLOCKS)_tb.v $(BLOCKS).hex
 	# this is GL
 	iverilog -Ttyp -DFUNCTIONAL -DGL -DUSE_POWER_PINS -DUNIT_DELAY=#1 \
-		-f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@.vvp $<
+		-f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@ $<
 
 .PHONY: GL_SDF
+.PHONY: GL_SDF.vvp
 .PHONY: GL_SDF.vcd
-GL_SDF.vvp : $(BLOCKS)_tb.v $(BLOCKS).hex
+GL_SDF.vcd GL_SDF.vvp : $(BLOCKS)_tb.v $(BLOCKS).hex
 	# this is GL_SDF
 	cvc  +interp \
 		+define+SIM +define+FUNCTIONAL +define+GL +define+USE_POWER_PINS +define+UNIT_DELAY +define+ENABLE_SDF \
