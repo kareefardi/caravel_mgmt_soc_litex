@@ -55,15 +55,15 @@ GL_SDF.vvp : $(BLOCKS)_tb.v $(BLOCKS).hex
 		+change_port_type +dump2fst +fst+parallel2=on   +nointeractive +notimingchecks +mipdopt \
 		-f $(VERILOG_PATH)/includes/includes.gl+sdf.$(CONFIG) $< | tee $@.log
 
-GL_SDF : % : %.vpp
-	# done simulation $(BLOCKS)
+GL_SDF : % : %.vvp
+	# GL_SDF done simulation $(BLOCKS)
 	
 
-RTL GL : % : %.vcd
-	# done simulating $(BLOCKS)
+RTL GL : % : %.vpp
+	# RTL GL done simulating $(BLOCKS)
 
 
-RTL.vcd GL.vcd : %.vcd : %.vvp
+RTL.vpp GL.vpp : %.vpp : %.vcd
 	vvp $< | tee $<.log
 
 
