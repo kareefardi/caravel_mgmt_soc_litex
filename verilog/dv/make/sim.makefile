@@ -59,11 +59,11 @@ GL_SDF : % : %.vpp
 	# done simulation $(BLOCKS)
 	
 
-RTL GL : % : %.vcd
+RTL GL : % : %.vpp
 	# done simulating $(BLOCKS)
 
 
-RTL.vcd GL.vcd : %.vcd : %.vvp
+RTL.vpp GL.vpp : %.vpp : %.vcd
 	vvp $< | tee $<.log
 
 
