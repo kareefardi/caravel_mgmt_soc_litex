@@ -47,7 +47,7 @@ GL.vcd : $(BLOCKS)_tb.v $(BLOCKS).hex
 		-f $(VERILOG_PATH)/includes/includes.gl.$(CONFIG) -o $@ $<
 
 .PHONY: GL_SDF
-.PHONY: GL_SDF.vpp
+.PHONY: GL_SDF.vvp
 GL_SDF.vvp : $(BLOCKS)_tb.v $(BLOCKS).hex
 	# this is GL_SDF
 	cvc  +interp \
@@ -59,11 +59,11 @@ GL_SDF : % : %.vvp
 	# GL_SDF done simulation $(BLOCKS)
 	
 
-RTL GL : % : %.vpp
+RTL GL : % : %.vvp
 	# RTL GL done simulating $(BLOCKS)
 
 
-RTL.vpp GL.vpp : %.vpp : %.vcd
+RTL.vvp GL.vvp : %.vvp : %.vcd
 	vvp $< | tee $<.log
 
 
