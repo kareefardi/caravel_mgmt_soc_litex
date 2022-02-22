@@ -54,8 +54,12 @@ set ::env(FP_PDN_IRDROP) 0
 
 set ::env(FP_PDN_ENABLE_RAILS) 0
 
-set ::env(FP_HORIZONTAL_HALO) -6
-set ::env(FP_VERTICAL_HALO) 25
+# set ::env(FP_HORIZONTAL_HALO) -6
+# set ::env(FP_VERTICAL_HALO) 25
+
+
+set ::env(FP_HORIZONTAL_PDN_HALO) -6
+set ::env(FP_VERTICAL_PDN_HALO) 25
 
 set ::env(FP_PDN_HOFFSET) 60 
 set ::env(FP_PDN_HWIDTH) 3.2
@@ -70,21 +74,21 @@ set ::env(PL_RESIZER_TIMING_OPTIMIZATIONS) 0
 
 ## Routing
 set ::env(GLB_RT_ADJUSTMENT) 0
-set ::env(GLB_RT_L2_ADJUSTMENT) 0.31
-set ::env(GLB_RT_L3_ADJUSTMENT) 0.31
-set ::env(GLB_RT_L4_ADJUSTMENT) 0.21
-set ::env(GLB_RT_L5_ADJUSTMENT) 0.21
-set ::env(GLB_RT_L6_ADJUSTMENT) 0.1
-set ::env(GLB_RT_ALLOW_CONGESTION) 1
-set ::env(GLB_RT_OVERFLOW_ITERS) 200
+# set ::env(GLB_RT_L2_ADJUSTMENT) 0.31
+# set ::env(GLB_RT_L3_ADJUSTMENT) 0.31
+# set ::env(GLB_RT_L4_ADJUSTMENT) 0.21
+# set ::env(GLB_RT_L5_ADJUSTMENT) 0.21
+# set ::env(GLB_RT_L6_ADJUSTMENT) 0.1
+# set ::env(GLB_RT_ALLOW_CONGESTION) 1
+# set ::env(GLB_RT_OVERFLOW_ITERS) 200
 
-set ::env(GLB_RT_MINLAYER) 2
-set ::env(GLB_RT_MAXLAYER) 6
+set ::env(RT_MIN_LAYER) met1
+set ::env(RT_MAX_LAYER) met5
 
-set ::env(GLB_RT_OBS) "\
-   li1 $::env(DIE_AREA),
-   met5 5 10 555 750, \
-   met4 5 10 555 750"
+# set ::env(GLB_RT_OBS) "\
+#    li1 $::env(DIE_AREA),
+#    met5 5 10 555 750, \
+#    met4 5 10 555 750"
 
 set ::env(GLB_RESIZER_TIMING_OPTIMIZATIONS) 0
 

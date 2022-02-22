@@ -73,3 +73,6 @@ set ::env(GLB_RESIZER_HOLD_SLACK_MARGIN) 0.85
 
 ## Diode Insertion
 set ::env(DIODE_INSERTION_STRATEGY) 4
+
+# disable cts
+set ::env(CLOCK_TREE_SYNTH) 0
